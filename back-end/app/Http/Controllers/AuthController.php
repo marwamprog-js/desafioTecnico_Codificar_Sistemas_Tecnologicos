@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-
 class AuthController extends Controller
 {
     public function login(Request $request) {
@@ -32,8 +31,8 @@ class AuthController extends Controller
         return response()->json(auth()->user());
     }
 
-    public function refresh() {
-        $token = auth('api')->refresh(); 
+    public function refresh() {               
+        $token = auth('api')->refresh();
         return response()->json(['token' => $token]);
     }
 }
