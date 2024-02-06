@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+
 class AuthController extends Controller
 {
     public function login(Request $request) {
@@ -18,9 +19,6 @@ class AuthController extends Controller
             return response()->json(['erro' => 'Usuário ou senha inválido'], 403);
         }
 
-
-        //retornar um JWT
-        return 'Login';
     }
 
     public function logout() {
