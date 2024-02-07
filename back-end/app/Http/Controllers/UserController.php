@@ -19,20 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        try {            
-            $users = User::all();
-
-            return response()->json([
-                'status' => 200,
-                'users' => $users
-            ]);
-
-        } catch (\Exception $ex) {
-            return response()->json([
-                'status' => 500,
-                'msg' => $ex->getMessage()
-            ], 500);
-        }
+        
     }
 
     /**
@@ -43,19 +30,28 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-       //Validação dos campos
-        $request->validate($this->user->rules(), $this->user->feedback());
+        try {            
+            
+            //Validação dos campos
+            $request->validate($this->user->rules(), $this->user->feedback());
+    
+            $user = new User();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->password = bcrypt($request->input('password'));
+            $user->save();
+    
+            return response()->json([
+                'status' => 'NO_CONTENT',
+                'user' => $user
+            ], 201);
 
-        $user = new User();
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->password = bcrypt($request->input('password'));
-        $user->save();
-
-        return response()->json([
-            'status' => 'NO_CONTENT',
-            'user' => $user
-        ], 201);
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status' => 'INTERNAL_SERVER',
+                'error' => $ex->getMessage()
+            ], 500);
+        }
         
     }
 
@@ -67,19 +63,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-
-        if($user) {
-            return response()->json([
-                'status' => 200,
-                'user' => $user
-            ]);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'msg' => "Usuário não encontrado"
-            ], 404);
-        }
+        //
     }
 
     /**

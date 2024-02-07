@@ -24,6 +24,10 @@ class User extends Authenticatable implements JWTSubject
         'password',
     ];
 
+    public function Posts() {
+        return $this->hasMany(Post::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
