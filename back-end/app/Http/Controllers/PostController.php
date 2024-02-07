@@ -162,6 +162,35 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $post = Post::find($id);
+    
+            if($post === null) {
+                return response()->json([
+                    'status' => 'NOT_FOUND',
+                    'error' => 'Post não localizado. Favor informar outro código'
+                ], 404);
+            }
+    
+            if($post->user_id != auth()->user()->id) {
+                return response()->json([
+                    'status' => 'FORBIDDEN',
+                    'error' => 'Permissão para excluir post negada'
+                ], 403);
+            }
+    
+            $post->delete();
+
+            return response()->json([
+                'status' => 'NO_CONTENT',
+                'msg' => 'Deletado com sucesso'
+            ], 201);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'INTERNAL_SERVER',
+                'error' => $ex->getMessage()
+            ], 500);
+        }
     }
 }
