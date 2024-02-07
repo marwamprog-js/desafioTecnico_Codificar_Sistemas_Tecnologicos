@@ -7,6 +7,11 @@ use App\Models\User;
 
 class UserController extends Controller
 {
+
+    public function __construct(User $user) {
+        $this->user = $user;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,7 +43,20 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       //Validação dos campos
+        $request->validate($this->user->rules(), $this->user->feedback());
+
+        $user = new User();
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = bcrypt($request->input('password'));
+        $user->save();
+
+        return response()->json([
+            'status' => 'NO_CONTENT',
+            'user' => $user
+        ], 201);
+        
     }
 
     /**

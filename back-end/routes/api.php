@@ -24,9 +24,11 @@ Route::prefix('v1')->middleware('jwt.auth')->group(function() {
     Route::post('refresh', 'App\Http\Controllers\AuthController@refresh');
     Route::post('logout', 'App\Http\Controllers\AuthController@logout');
 
-    Route::apiResource('users', 'App\Http\Controllers\UserController');
 });
 
 
+//## Cadastro Usuarios
+Route::post('users', 'App\Http\Controllers\UserController@store');
 
+//## Login
 Route::post('login', 'App\Http\Controllers\AuthController@login');
