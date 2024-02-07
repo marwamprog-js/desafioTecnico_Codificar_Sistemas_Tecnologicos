@@ -28,9 +28,10 @@ Route::prefix('v1')->middleware('jwt.auth')->group(function() {
 
 });
 
-
-//## Cadastro Usuarios
-Route::post('users', 'App\Http\Controllers\UserController@store');
-
-//## Login
-Route::post('login', 'App\Http\Controllers\AuthController@login');
+Route::prefix('v1')->group(function() {
+    //## Cadastro Usuarios
+    Route::post('users', 'App\Http\Controllers\UserController@store');
+    
+    //## Login
+    Route::post('login', 'App\Http\Controllers\AuthController@login');
+});

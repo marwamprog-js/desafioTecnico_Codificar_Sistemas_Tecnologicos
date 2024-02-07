@@ -26,6 +26,17 @@ services:
       - ./back-end/.docker/dbdata:/var/lib/mysql
     networks:
       - docker
+  
+  libx-frontend:
+    build: ./front-end
+    volumes:
+      - ./front-end:/app
+    working_dir: /app
+    ports:
+      - 8080:8080
+    command: ['yarn', 'serve']
+    networks:
+      - docker
 
 networks:
   docker:
