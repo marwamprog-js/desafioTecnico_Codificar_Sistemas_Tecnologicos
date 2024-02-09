@@ -28,16 +28,22 @@
                     <p class="text-center">Ainda não faz parte do LibX? <br>Favor realizar o cadastro abaixo</p>
                     <div class="card">
                         <div class="card-body">
-                            <div class="mb-3">
-                                <input type="text" class="form-control" placeholder="Nome">
-                            </div>
-                            <div class="mb-3">
-                                <input type="email" class="form-control" placeholder="E-mail">
-                            </div>
-                            <div class="mb-3">
-                                <input type="password" class="form-control" placeholder="Senha">
-                            </div>
-                            <button class="btn btn-primary">Me inscrever</button>
+                            <form @submit.prevent="hundleSubmit">
+                                <AlertError v-if="error" :error="error" />
+                                <!-- <div v-if="error" class="alert alert-danger">
+                                    {{ error }}
+                                </div> -->
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" v-model="name" name="name" placeholder="Nome">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" v-model="email" name="email" placeholder="E-mail">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="password" class="form-control" v-model="password" name="password" placeholder="Senha">
+                                </div>
+                                <button class="btn btn-primary">Me inscrever</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -47,8 +53,33 @@
 </template>
 
 <script>
-export default {
+import axios from 'axios';
 
+export default {
+    name: "IndexComponent",
+    data() {
+        return {
+            name: '',
+            email: '',
+            password: '',
+            error: ''
+        }
+    },
+    methods: {
+        async hundleSubmit() {
+
+            try {
+                await axios.post('users', {
+                    name: this.name,
+                    email: this.email,
+                    password: this.password,
+                });                
+            } catch (error) {
+                console.error(error);
+                this.error = 'Ocorreu um error';
+            }
+        }
+    }
 }
 </script>
 

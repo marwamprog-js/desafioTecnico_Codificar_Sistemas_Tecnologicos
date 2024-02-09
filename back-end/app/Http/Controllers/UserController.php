@@ -30,11 +30,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        try {            
-            
-            //Validação dos campos
-            $request->validate($this->user->rules(), $this->user->feedback());
-    
+        //Validação dos campos
+        $request->validate($this->user->rules(), $this->user->feedback());
+        
+        try {
+
             $user = new User();
             $user->name = $request->input('name');
             $user->email = $request->input('email');
@@ -42,7 +42,7 @@ class UserController extends Controller
             $user->save();
     
             return response()->json([
-                'status' => 'NO_CONTENT',
+                'response' => 'CREATED',
                 'user' => $user
             ], 201);
 

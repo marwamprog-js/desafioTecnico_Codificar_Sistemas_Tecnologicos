@@ -15,7 +15,7 @@ class AuthController extends Controller
         if($token) { // Usuario autenticado com sucesso
             return response()->json(['token' => $token]);
         } else { // Erro de usuário ou senha 
-            return response()->json(['erro' => 'Usuário ou senha inválido'], 403);
+            return response()->json(['erro' => 'Usuário ou senha inválido'], 401);
         }
 
     }
@@ -28,7 +28,14 @@ class AuthController extends Controller
     }
 
     public function me() {
-        return response()->json(auth()->user());
+
+        $userResponse = [
+            "id" => auth()->user()->id,
+            "name" => auth()->user()->name,
+            "email" => auth()->user()->email
+        ];
+
+        return response()->json($userResponse);
     }
 
     public function refresh() {               

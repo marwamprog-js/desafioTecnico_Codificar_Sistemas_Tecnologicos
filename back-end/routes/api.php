@@ -20,11 +20,12 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::prefix('v1')->middleware('jwt.auth')->group(function() {
-    Route::post('me', 'App\Http\Controllers\AuthController@me');
+    Route::get('me', 'App\Http\Controllers\AuthController@me');
     Route::post('refresh', 'App\Http\Controllers\AuthController@refresh');
     Route::post('logout', 'App\Http\Controllers\AuthController@logout');
 
-    Route::apiResource('/post', 'App\Http\Controllers\PostController');
+    Route::apiResource('/posts', 'App\Http\Controllers\PostController');
+    Route::get('/posts/{id}/user', 'App\Http\Controllers\PostController@showPorIdLogado');
 
 });
 

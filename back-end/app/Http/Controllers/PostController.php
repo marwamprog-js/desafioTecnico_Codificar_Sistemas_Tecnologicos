@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\dto\post\PostResponseDTO;
 
 class PostController extends Controller
 {
@@ -21,6 +22,7 @@ class PostController extends Controller
     {
         try {
             $posts = Post::with(['user'])->get();
+            $postResponse = [];
     
             if($posts === null) {
                 return response()->json([
@@ -28,10 +30,22 @@ class PostController extends Controller
                     'error' => 'Nenhum post cadastro'
                 ], 404);
             }
+
+            foreach ($posts as $post) {
+                $data = $post->created_at;
+                $data = date('d/m/Y H:i:s', strtotime($data)); 
+                
+                $postResponse[] = [
+                    "id" => $post->id,
+                    "post" => $post->post,
+                    "created_at" => $data,
+                    "user" => $post->user->name
+                ];
+            }
     
             return response()->json([
                 'status' => 'OK',
-                'post' => $posts
+                'posts' => $postResponse
             ]);
 
         } catch (\Exception $ex) {
@@ -70,6 +84,61 @@ class PostController extends Controller
             ], 500);
         }
 
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showPorIdLogado($id)
+    {
+        try {
+            $posts = Post::with(['user'])->where('user_id', $id)->get();
+            $postResponse = [];
+   
+            if($posts === null) {
+                return response()->json([
+                    'status' => 'NOT_FOUND',
+                    'error' => 'Usuário ainda não publicou posts'
+                ], 404);
+            }
+
+            if($id != auth()->user()->id) {
+                return response()->json([
+                    'status' => 'FORBIDDEN',
+                    'error' => 'Permissão para ver post negada'
+                ], 403);
+            }
+
+            foreach ($posts as $post) {
+                $data = $post->created_at;
+                $data = date('d/m/Y H:i:s', strtotime($data)); 
+                
+                $postResponse[] = [
+                    "id" => $post->id,
+                    "post" => $post->post,
+                    "created_at" => $data,
+                    "user" => [
+                        "id" => $post->user->id,
+                        "name" => $post->user->name
+                    ]
+                ];
+            }
+
+    
+            return response()->json([
+                'status' => 'OK',
+                'posts' => $postResponse
+            ]);
+
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status' => 'INTERNAL_SERVER',
+                'error' => $ex->getMessage()
+            ], 500);
+        }
     }
 
     /**

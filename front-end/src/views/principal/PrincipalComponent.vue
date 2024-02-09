@@ -6,18 +6,20 @@
 
     <div class="container mt-4">
       <div class="row">
-        <div class="col-2">
+        <div class="col-3">
           <div class="card">
             <div class="card-body">
-              <h4>Nome do usuário</h4>
+              <h4>{{ userAuth.name }}</h4>
               <p>Quantidade de posts 4</p>
             </div>
           </div>
         </div>
-        <div class="col-10">
+        <div class="col-6">
             <div class="pages">
-                <PostsComponent />
+                <router-view></router-view>
             </div>
+        </div>  
+        <div class="col-3">
         </div>          
       </div>
     </div>
@@ -25,12 +27,33 @@
 </template>
 
 <script>
+import axios from 'axios';
 import NavbarComponent from "./components/NavbarComponent.vue";
-import PostsComponent from "../posts/PostsComponent.vue";
 
 export default {
   name: "PrincipalComponent",
-  components: { NavbarComponent, PostsComponent },
+  components: { 
+    NavbarComponent 
+  },
+  data() {
+    return {
+      userAuth: {}
+    }
+  },
+  async created() {
+
+    try {
+      this.userAuth = {}
+          
+      const response = await axios.get('me');
+      console.log('userAuth >>>> ', response);
+      this.userAuth = response.data;
+      this.$store.dispatch('user', this.userAuth);      
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
 };
 </script>
 

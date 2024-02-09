@@ -49,7 +49,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function rules() {
         return [
-            'name' => 'required|min:3|max:15',
+            'name' => 'required|min:5|max:15',
             'email' => 'required|email|unique:users,email,'.$this->id,
             'password' => 'required|min:8|max:8',
         ];
@@ -58,12 +58,12 @@ class User extends Authenticatable implements JWTSubject
     public function feedback() {
         return [
             'required' => 'O campo :attribute é obrigatório',
-            'name.min' => 'O campo nome de ter no mínimo 3 caracteres',
+            'name.min' => 'O campo nome de ter no mínimo 5 caracteres',
             'name.max' => 'O campo nome de ter no máximo 15 caracteres',
             'email.email' => 'O campo e-mail é obrigatório',
             'email.unique' => 'O endereço de Email já existe',
-            'password.min' => 'O campo nome de ter no mínimo 8 caracteres',
-            'password.max' => 'O campo nome de ter no máximo 8 caracteres',
+            'password.min' => 'O campo Senha de ter no mínimo 8 caracteres',
+            'password.max' => 'O campo Senha de ter no máximo 8 caracteres',
         ];
     }
 

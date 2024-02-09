@@ -2,6 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import IndexComponent from '@/views/index/IndexComponent';
 import LoginComponent from '@/views/login/LoginComponent';
 import PrincipalComponent from '@/views/principal/PrincipalComponent';
+import PostsComponent from '@/views/posts/PostsComponent';
+import MeusPostComponent from '@/views/meus-posts/MeusPostsComponent';
+import NovoPostComponent from '@/views/meus-posts/NovoPostComponent';
+import UsuarioPostsComponent from '@/views/meus-posts/UsuarioPostsComponent';
 
 const routes = [
     {
@@ -16,7 +20,15 @@ const routes = [
     },
     {
         path: '/principal',
-        component: PrincipalComponent
+        component: PrincipalComponent,
+        name: 'principal',
+        children: [
+            { path: '', component: PostsComponent },
+            { path: 'meus-posts', component: MeusPostComponent, name: 'meus-posts', children: [
+                { path: '', component: UsuarioPostsComponent, name: 'usuario-post' },
+                { path: 'novo', component: NovoPostComponent, name: 'novo-post' },
+            ]}
+        ]
     },
 ]
 
