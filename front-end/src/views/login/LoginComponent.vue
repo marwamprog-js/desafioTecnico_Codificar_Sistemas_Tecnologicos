@@ -6,9 +6,7 @@
         <div class="navbar-nav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <router-link class="nav-link" :to="{ name: 'index' }"
-                >Voltar</router-link
-              >
+              <router-link class="nav-link" :to="{ name: 'index' }">Voltar</router-link>
             </li>
           </ul>
         </div>
@@ -64,22 +62,28 @@ export default {
   },
   methods: {
     async handleSubmit() {
-
         try {
-            const response = await axios.post("login", {
+            let response = await axios.post("login", {
               email: this.email,
               password: this.password,
             });
       
-            console.log("Email >>>>>>>", this.email);
-            console.log("Login >>>>>>> ", response);
-      
             localStorage.setItem("token", response.data.token);
-            this.$store.dispatch("user", { name: "" });
+
+            console.log('Token Login ::: ', localStorage.getItem('token'))
+            
+            response = await axios.get("me", {
+              headers: {
+                Authorization: "Bearer " + response.data.token
+              }
+            });
+
+            this.$store.dispatch("user", response.data);
       
-            this.$router.push({ path: "/principal" });
+            this.$router.push({ name: "principal" });
             
         } catch (e) {
+            console.log(e)
             this.error = 'Usuário / senha inválidos';
         }
     },

@@ -9,8 +9,7 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <form class="form-inline my-2 my-lg-0 mr-auto">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        
                     </form>
                     <ul class="navbar-nav ">
                         <li class="nav-item active">
@@ -19,13 +18,13 @@
                             </router-link>
                         </li>
                         <li class="nav-item active">
-                            <router-link class="nav-link" :to="{ name: 'usuario-post' }">
+                            <router-link class="nav-link" :to="{ name: 'posts' }">
                                 <i class="fa-solid fa-signs-post"></i> Meus Post 
                             </router-link>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-user"></i> {{ user.name }}
+                                <i class="fa-solid fa-user"></i> {{ user ? user.name : '' }}
                             </a>
                             <div class="dropdown-menu">
                                 <router-link class="dropdown-item" :to="{ name: 'index' }"><i class="fa-solid fa-gear"></i> Meus Dados </router-link>
@@ -40,21 +39,35 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { mapGetters } from 'vuex';
 
 export default {
     name: 'NavbarComponent',
-    methods: {
-        logout() {
-            localStorage.removeItem('token', '');
-            this.$store.dispatch('user', {});
-            
-            this.$router.push({ name: 'index' });
-        }
-    },
     computed: {
-        ...mapGetters(['user'])
+    ...mapGetters(['user'])
+    },
+    methods: {
+        async logout() {
+            
+            try {                
+                await axios.get("logout", {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+                
+                localStorage.removeItem("token");
+
+                this.$store.dispatch("user", {});
+    
+                this.$router.push({ name: 'login' });
+            } catch (error) {
+                console.error(error);
+            }
+        }
     }
+    
 }
 </script>
 

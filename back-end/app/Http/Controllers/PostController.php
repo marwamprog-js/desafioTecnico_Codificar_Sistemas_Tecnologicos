@@ -21,7 +21,7 @@ class PostController extends Controller
     public function index()
     {
         try {
-            $posts = Post::with(['user'])->get();
+            $posts = Post::with(['user'])->orderBy('updated_at', 'DESC')->get();
             $postResponse = [];
     
             if($posts === null) {
@@ -32,7 +32,7 @@ class PostController extends Controller
             }
 
             foreach ($posts as $post) {
-                $data = $post->created_at;
+                $data = $post->updated_at;
                 $data = date('d/m/Y H:i:s', strtotime($data)); 
                 
                 $postResponse[] = [
@@ -95,7 +95,7 @@ class PostController extends Controller
     public function showPorIdLogado($id)
     {
         try {
-            $posts = Post::with(['user'])->where('user_id', $id)->get();
+            $posts = Post::with(['user'])->where('user_id', $id)->orderBy('updated_at', 'DESC')->get();
             $postResponse = [];
    
             if($posts === null) {
@@ -113,7 +113,7 @@ class PostController extends Controller
             }
 
             foreach ($posts as $post) {
-                $data = $post->created_at;
+                $data = $post->updated_at;
                 $data = date('d/m/Y H:i:s', strtotime($data)); 
                 
                 $postResponse[] = [

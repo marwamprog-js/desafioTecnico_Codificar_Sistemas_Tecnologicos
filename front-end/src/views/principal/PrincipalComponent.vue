@@ -6,54 +6,78 @@
 
     <div class="container mt-4">
       <div class="row">
-        <div class="col-3">
-          <div class="card">
-            <div class="card-body">
-              <h4>{{ userAuth.name }}</h4>
-              <p>Quantidade de posts 4</p>
+        <SidebarComponent />
+        <div class="col-6">
+          <div class="pages">
+            <div class="card mb-4" v-for="post in posts" :key="post.id">
+              <PostComponent :post="post" />
             </div>
+
           </div>
         </div>
-        <div class="col-6">
-            <div class="pages">
-                <router-view></router-view>
-            </div>
-        </div>  
-        <div class="col-3">
-        </div>          
+        <div class="col-3"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import NavbarComponent from "./components/NavbarComponent.vue";
+import axios from "axios";
+import { mapGetters } from "vuex";
+import NavbarComponent from "../../components/NavbarComponent.vue";
+import SidebarComponent from "../../components/SidebarComponent.vue";
+import PostComponent from "../../components/PostComponent.vue";
 
 export default {
   name: "PrincipalComponent",
-  components: { 
-    NavbarComponent 
+  components: {
+    NavbarComponent,
+    SidebarComponent,
+    PostComponent,
   },
   data() {
     return {
-      userAuth: {}
-    }
+      posts: {},
+    };
   },
   async created() {
+    console.log('Usuario --- ',this.user);
+    if (this.user) {
+      try {
+        let response = await axios.get("me", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('token'),
+          },
+        });
 
-    try {
-      this.userAuth = {}
-          
-      const response = await axios.get('me');
-      console.log('userAuth >>>> ', response);
-      this.userAuth = response.data;
-      this.$store.dispatch('user', this.userAuth);      
-    } catch (error) {
-      console.error(error);
+        this.$store.dispatch("user", response.data);
+      } catch (error) {
+        console.error(error);
+      }
     }
 
-  }
+    this.getPosts();
+  },
+  computed: {
+    ...mapGetters(["user"]),
+  },
+  methods: {
+    async getPosts() {
+      
+      await axios
+        .get("http://localhost:8000/api/v1/posts", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          this.posts = res.data.posts;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+  },
 };
 </script>
 

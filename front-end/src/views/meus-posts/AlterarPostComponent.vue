@@ -9,7 +9,7 @@
         <SidebarComponent />
         <div class="col-6">
           <div class="pages">
-            <h3>Novo Post</h3>
+            <h3 v-if="this.post">Alterar Post</h3>
 
             <div class="card">
               <div class="card-body">
@@ -55,9 +55,6 @@ export default {
   components: {
     NavbarComponent,
     SidebarComponent
-  },  
-  computed: {
-    ...mapGetters(["user"]),
   },
   data() {
     return {
@@ -66,6 +63,7 @@ export default {
     };
   },
   async created() {
+
     if (this.user) {
       try {
         let response = await axios.get("me", {
@@ -79,6 +77,20 @@ export default {
         console.error(error);
       }
     }
+
+    try {
+      const id = this.$route.params.id;
+
+      const response = await axios.get(`posts/${id}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+
+      this.post = response.data.post.post;
+    } catch (error) {
+      console.error(error);
+    }
   },
   methods: {
     async hundleSubmit() {
@@ -90,15 +102,15 @@ export default {
           return;
         }
 
-        await axios.post("posts", { post: this.post }, {
+        await axios.put(`posts/${this.$route.params.id}`, { post: this.post }, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
         });
 
         this.$swal("Mensagem postada com sucesso");
+        
 
-        this.post = "";
       } catch (error) {
         this.$notify({
           type: "error",
@@ -107,6 +119,9 @@ export default {
         });
       }
     },
+  },
+  computed: {
+    ...mapGetters(["user", "postUpdate"]),
   },
 };
 </script>

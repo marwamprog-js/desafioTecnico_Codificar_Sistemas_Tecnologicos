@@ -2,10 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 import IndexComponent from '@/views/index/IndexComponent';
 import LoginComponent from '@/views/login/LoginComponent';
 import PrincipalComponent from '@/views/principal/PrincipalComponent';
-import PostsComponent from '@/views/posts/PostsComponent';
-import MeusPostComponent from '@/views/meus-posts/MeusPostsComponent';
 import NovoPostComponent from '@/views/meus-posts/NovoPostComponent';
-import UsuarioPostsComponent from '@/views/meus-posts/UsuarioPostsComponent';
+import AlterarPostComponent from '@/views/meus-posts/AlterarPostComponent';
+import PostsComponent from '@/views/meus-posts/PostsComponent';
 
 const routes = [
     {
@@ -22,14 +21,22 @@ const routes = [
         path: '/principal',
         component: PrincipalComponent,
         name: 'principal',
-        children: [
-            { path: '', component: PostsComponent },
-            { path: 'meus-posts', component: MeusPostComponent, name: 'meus-posts', children: [
-                { path: '', component: UsuarioPostsComponent, name: 'usuario-post' },
-                { path: 'novo', component: NovoPostComponent, name: 'novo-post' },
-            ]}
-        ]
     },
+    { 
+        path: '/posts', 
+        component: PostsComponent, 
+        name: 'posts', 
+    },
+    { 
+        path: '/posts/novo', 
+        component: NovoPostComponent, 
+        name: 'novo-post' 
+    },
+    { 
+        path: '/posts/:id/atualizar', 
+        component: AlterarPostComponent, 
+        name: 'atualizar-post' 
+    }
 ]
 
 const router = createRouter({
