@@ -29,7 +29,7 @@
                     <div class="card">
                         <div class="card-body">
                             <form @submit.prevent="hundleSubmit">
-                                <AlertError v-if="error" :error="error" />
+                                <AlertError v-if="!isNotError" :errors="errors" />
                                 <!-- <div v-if="error" class="alert alert-danger">
                                     {{ error }}
                                 </div> -->
@@ -62,21 +62,59 @@ export default {
             name: '',
             email: '',
             password: '',
-            error: ''
+            isNotError: true,
+            errors: []
         }
     },
     methods: {
         async hundleSubmit() {
 
             try {
-                await axios.post('users', {
-                    name: this.name,
-                    email: this.email,
-                    password: this.password,
-                });                
+
+                this.isNotError = true;
+                this.errors = [];
+
+                if (this.name === "") {
+                    this.errors.push("O campo nome deve ser preenchido");
+                    this.isNotError = false;
+                }
+
+                if (this.name.length < 5) {
+                    this.errors.push("O campo nome deve ter no mínimo 5 caracteres");
+                    this.isNotError = false;
+                }
+
+                if (this.name.length > 15) {
+                    this.errors.push("O campo nome deve ter no máximo 15 caracteres");
+                    this.isNotError = false;
+                }
+
+                if (this.email === "") {
+                    this.errors.push("O campo email deve ser preenchido");
+                    this.isNotError = false;
+                }
+
+                if (this.password === "") {
+                    this.errors.push("O campo senha deve ser preenchido");
+                    this.isNotError = false;
+                }
+
+                if (this.password.length < 8) {
+                    this.errors.push("O campo senha deve ter no mínimo 8 caracteres");
+                    this.isNotError = false;
+                }
+
+                if(this.isNotError) {
+                    await axios.post('users', {
+                        name: this.name,
+                        email: this.email,
+                        password: this.password,
+                    });  
+                }
+
             } catch (error) {
-                console.error(error);
-                this.error = 'Ocorreu um error';
+                this.isNotError = false;
+                this.errors.push("Ocorreu um error");
             }
         }
     }

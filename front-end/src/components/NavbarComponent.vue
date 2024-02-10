@@ -63,8 +63,14 @@ export default {
     
                 this.$router.push({ name: 'login' });
             } catch (error) {
-                console.error(error);
+                this.forcarLogout()
             }
+        },
+        forcarLogout() {
+            this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
+            localStorage.removeItem("token");
+            this.$store.dispatch("user", {});
+            this.$router.push({ name: "login" });
         }
     }
     

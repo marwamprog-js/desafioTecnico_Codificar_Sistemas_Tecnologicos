@@ -14,7 +14,7 @@
             <div class="card">
               <div class="card-body">
                 <form @submit.prevent="hundleSubmit">
-                  <AlertError v-if="error" :error="error" />
+                  <AlertError v-if="!isNotError" :errors="errors" />
                   <div class="mb-3">
                     <label for="post" class="form-label"
                       >Digite aqui seu post:
@@ -22,6 +22,7 @@
                     <textarea
                       class="form-control"
                       v-model="post"
+                      maxlength="280"
                       name="post"
                       rows="3"
                       placeholder="Post deve conter no máximo 280 Caracteres"
@@ -59,8 +60,12 @@ export default {
   data() {
     return {
       post: "",
-      error: "",
+      isNotError: true,
+      errors: []
     };
+  },
+  computed: {
+    ...mapGetters(["user", "postUpdate"]),
   },
   async created() {
 
@@ -74,7 +79,7 @@ export default {
 
         this.$store.dispatch("user", response.data);
       } catch (error) {
-        console.error(error);
+        this.logout();
       }
     }
 
@@ -89,40 +94,54 @@ export default {
 
       this.post = response.data.post.post;
     } catch (error) {
-      console.error(error);
+      this.logout();
     }
   },
   methods: {
     async hundleSubmit() {
       try {
-        this.error = "";
+        this.isNotError = true;
 
         if (this.post === "") {
-          this.error = "O campo post deve ser preenchido";
-          return;
+          this.errors.push("O campo post deve ser preenchido");
+          this.isNotError = false;
         }
 
-        await axios.put(`posts/${this.$route.params.id}`, { post: this.post }, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        });
+        if (this.post.length > 280) {
+          this.errors.push(`O campo post deve no máximo 280 caracteres. Foram digitados ${this.post.length}`);
+          this.isNotError = false;
+        }
 
-        this.$swal("Mensagem postada com sucesso");
-        
+        if(this.isNotError) {
+          await axios.put(`posts/${this.$route.params.id}`, { post: this.post }, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          });
+  
+          this.$swal("Mensagem postada com sucesso");
+        }        
 
       } catch (error) {
-        this.$notify({
-          type: "error",
-          title: "Info",
-          text: "Ocorreu um error",
-        });
+        if(error.response.status === 500) {
+          this.$notify({
+            type: "error",
+            title: "Info",
+            text: "Algo de errado aconteceu. Tente novamente. Se o erro persistir favor entrar em contato com suporte.",
+          });
+        } else {
+          this.logout(); 
+        }
       }
     },
+    logout() {
+      this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
+      localStorage.removeItem("token");
+      this.$store.dispatch("user", {});
+      this.$router.push({ name: "login" });
+    }
   },
-  computed: {
-    ...mapGetters(["user", "postUpdate"]),
-  },
+  
 };
 </script>
 

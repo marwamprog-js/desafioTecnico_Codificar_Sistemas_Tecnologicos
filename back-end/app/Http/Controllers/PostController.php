@@ -98,13 +98,6 @@ class PostController extends Controller
             $posts = Post::with(['user'])->where('user_id', $id)->orderBy('updated_at', 'DESC')->get();
             $postResponse = [];
    
-            if($posts === null) {
-                return response()->json([
-                    'status' => 'NOT_FOUND',
-                    'error' => 'Usuário ainda não publicou posts'
-                ], 404);
-            }
-
             if($id != auth()->user()->id) {
                 return response()->json([
                     'status' => 'FORBIDDEN',
@@ -112,19 +105,21 @@ class PostController extends Controller
                 ], 403);
             }
 
-            foreach ($posts as $post) {
-                $data = $post->updated_at;
-                $data = date('d/m/Y H:i:s', strtotime($data)); 
-                
-                $postResponse[] = [
-                    "id" => $post->id,
-                    "post" => $post->post,
-                    "created_at" => $data,
-                    "user" => [
-                        "id" => $post->user->id,
-                        "name" => $post->user->name
-                    ]
-                ];
+            if($posts != null){
+                foreach ($posts as $post) {
+                    $data = $post->updated_at;
+                    $data = date('d/m/Y H:i:s', strtotime($data)); 
+                    
+                    $postResponse[] = [
+                        "id" => $post->id,
+                        "post" => $post->post,
+                        "created_at" => $data,
+                        "user" => [
+                            "id" => $post->user->id,
+                            "name" => $post->user->name
+                        ]
+                    ];
+                }
             }
 
     

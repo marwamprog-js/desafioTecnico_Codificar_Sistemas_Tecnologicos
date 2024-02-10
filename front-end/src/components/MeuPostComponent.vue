@@ -50,16 +50,26 @@ export default {
 
 
           } catch (error) {
-            console.log(error);
-            Swal.fire({
-              title: "Error!",
-              text: "Erro ao deletar. Favor tente novamente! Caso volte a acontecer entrar em contato com suporte.",
-              icon: "error",
-            });
+            
+            if(error.response.status === 500) {
+              this.$notify({
+                type: "error",
+                title: "error",
+                text: "Erro ao deletar. Favor tente novamente! Caso volte a acontecer entrar em contato com suporte.",
+              });
+            } else {
+              this.logout(); 
+            }
           }
         }
       });
     },
+    logout() {
+      this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
+      localStorage.removeItem("token");
+      this.$store.dispatch("user", {});
+      this.$router.push({ name: "login" });
+    }
   }
 };
 </script>

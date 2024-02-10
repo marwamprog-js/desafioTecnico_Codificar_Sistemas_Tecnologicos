@@ -1,13 +1,15 @@
 <template>
   <div class="alert alert-danger">
-    {{ error }}
+    <div v-for="error in errors" :key="error">
+      <span>{{ error }}</span>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "AlertErrorComponent",
-  props: ['error']
+  props: ['errors']
 };
 </script>
 

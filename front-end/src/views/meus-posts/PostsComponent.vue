@@ -19,6 +19,7 @@
             <div v-for="post in posts" :key="post.id">
               <MeuPostComponent :post="post" :user="user" :id="post.id" />
             </div>
+            <AlertErrorComponent v-if="posts.length === 0" :errors="['Você não tem post cadastrado. Para realizar uma nova postagem, clique em Novo post.']" />
 
           </div>
         </div>
@@ -30,10 +31,12 @@
 
 <script>
 import axios from "axios";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
+
 import NavbarComponent from "../../components/NavbarComponent.vue";
 import SidebarComponent from "../../components/SidebarComponent.vue";
 import MeuPostComponent from "../../components/MeuPostComponent.vue";
+import AlertErrorComponent from "../../components/AlertErrorComponent.vue";
 
 export default {
   name: "PostsComponent",
@@ -41,6 +44,7 @@ export default {
     NavbarComponent,
     SidebarComponent,
     MeuPostComponent,
+    AlertErrorComponent
   },
   data() {
     return {
@@ -49,6 +53,7 @@ export default {
   },
   computed: {
     ...mapGetters(["user"]),
+    ...mapState(["user"]),
   },
   async created() {
     if (this.user) {
@@ -61,37 +66,35 @@ export default {
 
         this.$store.dispatch("user", response.data);
       } catch (error) {
-        console.error(error);
+        //Caso Token tenha expirado Fazer LOGOUT
+        this.logout();  
       }
     }
-    this.getUsers();
+    this.getMeuPosts();
   },
   methods: {
-    async getUsers() {
-      const idUserAuth = this.user.id;
+    async getMeuPosts() {
 
-      const response = await axios
-        .get(`posts/${idUserAuth}/user`, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem('token'),
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-          this.posts = res.data.posts;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-
-      console.log(response);
-
-      // if(response.status == 200) {
-      //   // console.log(response.data);
-      //   this.posts = response.data;
-      // } else {
-      //   console.error("ocorreu um erro na api");
-      // }
+      try {
+        const idUserAuth = this.user.id;
+  
+        const response = await axios
+          .get(`posts/${idUserAuth}/user`, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem('token'),
+            },
+          })
+        
+          this.posts = response.data.posts; 
+        
+      } catch (error) {
+        if(error.response.status === 500) {
+          this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
+        } else {
+          this.logout(); 
+        }
+      }
+      
     },
     hundleNovo() {
       this.$store.dispatch("postUpdate", "");
@@ -103,7 +106,12 @@ export default {
 
       this.$router.push({ name: "novo-post" });
     },
-    
+    logout() {
+      this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
+      localStorage.removeItem("token");
+      this.$store.dispatch("user", {});
+      this.$router.push({ name: "login" });
+    }    
   },
 };
 </script>

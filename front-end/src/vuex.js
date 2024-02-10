@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 export default new Vuex.Store({
     state: {
         user: {},
-        postUpdate: {}
+        token: ""
     },
 
     getters: {
@@ -11,8 +11,8 @@ export default new Vuex.Store({
             return state.user;
         },
 
-        postUpdate: (state) => {
-            return state.postUpdate;
+        token: (state) => {
+            return state.token;
         }
     },
 
@@ -21,8 +21,8 @@ export default new Vuex.Store({
             context.commit('user', user);
         },
 
-        postUpdate(context, postUpdate) {
-            context.commit('postUpdate', postUpdate);
+        token(context, token) {
+            context.commit('token', token);
         }
     },
 
@@ -31,8 +31,8 @@ export default new Vuex.Store({
             state.user = user
         },
 
-        postUpdate(state, postUpdate) {
-            state.postUpdate = postUpdate
+        token(state, token) {
+            state.token = token
         }
     }
     

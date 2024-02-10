@@ -6,6 +6,7 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 import './axios'
+import './services/data.js'
 import store from './vuex'
 import AlertError from './components/AlertErrorComponent.vue';
 import Notifications from '@kyvg/vue3-notification';
@@ -17,6 +18,7 @@ Vue.use(store);
 Vue.use(router);
 Vue.use(Notifications);
 Vue.use(VueSweetalert2);
+
 Vue.component('AlertError', AlertError)
 
 Vue.mount('#app')
