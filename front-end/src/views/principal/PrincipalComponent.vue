@@ -6,7 +6,7 @@
 
     <div class="container mt-4">
       <div class="row">
-        <SidebarComponent />
+        <SidebarComponent :qtd_posts="qtd_posts" />
         <div class="col-6">
           <div class="pages">
             <div class="card mb-4" v-for="post in posts" :key="post.id">
@@ -42,11 +42,11 @@ export default {
   },
   data() {
     return {
-      posts: {},
+      posts: {}
     };
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user", "qtd_posts"]),
   },
   async created() {
     if (this.user) {
@@ -63,11 +63,10 @@ export default {
         this.logout();
       }
     }
-  },
-  mounted() {
+    this.getQtdPost(this.user.id);    
     this.getPosts();
   },
-  methods: {
+  methods: {    
     async getPosts() {
       try {
         const response = await axios.get("http://localhost:8000/api/v1/posts", {
@@ -77,6 +76,8 @@ export default {
         });
 
         this.posts = response.data.posts;
+        this.qtd_post = this.posts.length;
+
       } catch (error) {
         if(error.response.status === 500) {
           this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
@@ -90,6 +91,25 @@ export default {
       localStorage.removeItem("token");
       this.$store.dispatch("user", {});
       this.$router.push({ name: "login" });
+    },
+    async getQtdPost(id) {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/v1/posts/${id}/qtd-posts`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        });
+
+        this.$store.dispatch("qtd_posts", response.data.qtd_posts);
+        
+
+      } catch (error) {
+        if(error.response.status === 500) {
+          this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
+        } else {
+          this.logout(); 
+        }
+      }
     }
   },
 };

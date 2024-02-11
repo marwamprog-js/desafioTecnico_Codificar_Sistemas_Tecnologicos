@@ -86,6 +86,31 @@ class PostController extends Controller
 
     }
 
+    public function qtdPosts($id) {
+        try {
+            $qtd_posts = Post::where('user_id', $id)->count();
+               
+            if($id != auth()->user()->id) {
+                return response()->json([
+                    'status' => 'FORBIDDEN',
+                    'error' => 'Permissão para ver post negada'
+                ], 403);
+            }
+
+                
+            return response()->json([
+                'status' => 'OK',
+                'qtd_posts' => $qtd_posts
+            ]);
+
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status' => 'INTERNAL_SERVER',
+                'error' => $ex->getMessage()
+            ], 500);
+        }
+    }
+
      /**
      * Display the specified resource.
      *

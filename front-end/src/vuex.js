@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 export default new Vuex.Store({
     state: {
         user: {},
-        token: ""
+        qtd_posts: 0
     },
 
     getters: {
@@ -11,8 +11,8 @@ export default new Vuex.Store({
             return state.user;
         },
 
-        token: (state) => {
-            return state.token;
+        qtd_posts: (state) => {
+            return state.qtd_posts;
         }
     },
 
@@ -21,8 +21,8 @@ export default new Vuex.Store({
             context.commit('user', user);
         },
 
-        token(context, token) {
-            context.commit('token', token);
+        qtd_posts(context, qtd_posts) {
+            context.commit('qtd_posts', qtd_posts);
         }
     },
 
@@ -31,8 +31,8 @@ export default new Vuex.Store({
             state.user = user
         },
 
-        token(state, token) {
-            state.token = token
+        qtd_posts(state, qtd_posts) {
+            state.qtd_posts = qtd_posts
         }
     }
     

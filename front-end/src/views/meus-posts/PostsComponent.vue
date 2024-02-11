@@ -52,7 +52,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user", "qtd_posts"]),
     ...mapState(["user"]),
   },
   async created() {
@@ -65,6 +65,8 @@ export default {
         });
 
         this.$store.dispatch("user", response.data);
+        this.getQtdPost(response.data.id);
+
       } catch (error) {
         //Caso Token tenha expirado Fazer LOGOUT
         this.logout();  
@@ -111,6 +113,25 @@ export default {
       localStorage.removeItem("token");
       this.$store.dispatch("user", {});
       this.$router.push({ name: "login" });
+    },
+    async getQtdPost(id) {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/v1/posts/${id}/qtd-posts`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        });
+
+        this.$store.dispatch("qtd_posts", response.data.qtd_posts);
+        
+
+      } catch (error) {
+        if(error.response.status === 500) {
+          this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
+        } else {
+          this.logout(); 
+        }
+      }
     }    
   },
 };

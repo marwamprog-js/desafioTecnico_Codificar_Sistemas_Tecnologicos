@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-body">
         <h4>{{ user ? user.name : '' }}</h4>
-        <p>Quantidade de posts 4</p>
+        <p>Quantidade de posts {{ qtd_posts ? qtd_posts : 'Err' }}</p>
       </div>
     </div>
   </div>
@@ -15,7 +15,7 @@ import { mapGetters } from 'vuex';
 export default {
     name: 'SidebarComponent',
     computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user', 'qtd_posts'])
     },
 }
 </script>

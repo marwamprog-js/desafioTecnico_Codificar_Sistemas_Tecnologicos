@@ -26,6 +26,7 @@ Route::prefix('v1')->middleware('jwt.auth')->group(function() {
 
     Route::apiResource('/posts', 'App\Http\Controllers\PostController');
     Route::get('/posts/{id}/user', 'App\Http\Controllers\PostController@showPorIdLogado');
+    Route::get('/posts/{id}/qtd-posts', 'App\Http\Controllers\PostController@qtdPosts');
 
 });
 
