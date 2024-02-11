@@ -8,6 +8,6 @@ WORKDIR /usr/share/nginx/html
 RUN ln -s public html
 RUN apt update; \
     apt install vim -y; \
-    apt install nano -y
+    apt install nano -y;
 
 EXPOSE 80
