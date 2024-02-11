@@ -46,7 +46,8 @@ export default {
               icon: "success",
             });  
             
-            document.getElementById(this.post.id).remove();          
+            document.getElementById(this.post.id).remove();  
+            this.getQtdPost(this.user.id);        
 
 
           } catch (error) {
@@ -65,11 +66,31 @@ export default {
       });
     },
     logout() {
-      this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
+      this.$swal("Algo aconteceu. Você foi deslogado. Caso queira continuar, favor efetuar login.");
       localStorage.removeItem("token");
       this.$store.dispatch("user", {});
+      localStorage.setItem("isLogged", false);
       this.$router.push({ name: "login" });
-    }
+    },
+    async getQtdPost(id) {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/v1/posts/${id}/qtd-posts`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        });
+
+        this.$store.dispatch("qtd_posts", response.data.qtd_posts);
+        
+
+      } catch (error) {
+        if(error.response.status === 500) {
+          this.$swal("Algo aconteceu. Você foi deslogado. Caso queira continuar, favor efetuar login.");
+        } else {
+          this.logout(); 
+        }
+      }
+    } 
   }
 };
 </script>

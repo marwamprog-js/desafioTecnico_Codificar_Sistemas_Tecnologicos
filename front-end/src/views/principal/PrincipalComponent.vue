@@ -58,6 +58,7 @@ export default {
         });
 
         this.$store.dispatch("user", response.data);
+
       } catch (error) {
         //Caso Token tenha expirado Fazer LOGOUT
         this.logout();
@@ -87,9 +88,10 @@ export default {
       }
     },
     logout() {
-      this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
+      this.$swal("Algo aconteceu. Você foi deslogado. Caso queira continuar, favor efetuar login.");
       localStorage.removeItem("token");
       this.$store.dispatch("user", {});
+      localStorage.setItem("isLogged", false);
       this.$router.push({ name: "login" });
     },
     async getQtdPost(id) {

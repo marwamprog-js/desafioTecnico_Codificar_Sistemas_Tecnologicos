@@ -95,6 +95,7 @@ export default {
             localStorage.setItem("token", response.data.token);
 
             // this.$store.dispatch("token", response.data.token);
+            localStorage.setItem("isLogged", true);
             this.$store.dispatch("user", response.data);
 
             this.$router.push({ name: "principal" });

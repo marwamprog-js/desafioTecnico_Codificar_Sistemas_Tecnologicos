@@ -28,6 +28,9 @@ Route::prefix('v1')->middleware('jwt.auth')->group(function() {
     Route::get('/posts/{id}/user', 'App\Http\Controllers\PostController@showPorIdLogado');
     Route::get('/posts/{id}/qtd-posts', 'App\Http\Controllers\PostController@qtdPosts');
 
+    Route::patch('/users/altera-nome', 'App\Http\Controllers\UserController@alterarNome');
+    Route::patch('/users/altera-senha', 'App\Http\Controllers\UserController@alterarSenha');
+
 });
 
 Route::prefix('v1')->group(function() {

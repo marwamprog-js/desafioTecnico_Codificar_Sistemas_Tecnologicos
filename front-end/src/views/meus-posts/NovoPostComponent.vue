@@ -106,6 +106,8 @@ export default {
             },
           });
   
+          this.getQtdPost(this.user.id);
+
           this.$swal("Mensagem postada com sucesso");
   
           this.post = "";
@@ -125,9 +127,10 @@ export default {
       }
     },
     logout() {
-      this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
+      this.$swal("Algo aconteceu. Você foi delogado. Caso queira continuar, favor efetuar login.");
       localStorage.removeItem("token");
       this.$store.dispatch("user", {});
+      localStorage.setItem("isLogged", false);
       this.$router.push({ name: "login" });
     },
     async getQtdPost(id) {
@@ -143,7 +146,7 @@ export default {
 
       } catch (error) {
         if(error.response.status === 500) {
-          this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
+          this.$swal("Algo aconteceu. Você foi deslogado. Caso queira continuar, favor efetuar login.");
         } else {
           this.logout(); 
         }

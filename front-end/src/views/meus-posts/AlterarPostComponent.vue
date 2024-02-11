@@ -65,7 +65,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["user", "postUpdate"]),
+    ...mapGetters(["user", "isLogged"]),
   },
   async created() {
 
@@ -78,7 +78,7 @@ export default {
         });
 
         this.$store.dispatch("user", response.data);
-        this.qtd_posts(response.data.id); 
+        this.getQtdPost(response.data.id); 
 
       } catch (error) {
         this.logout();
@@ -139,9 +139,10 @@ export default {
       }
     },
     logout() {
-      this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
+      this.$swal("Algo aconteceu. Você foi deslogado. Caso queira continuar, favor efetuar login.");
       localStorage.removeItem("token");
       this.$store.dispatch("user", {});
+      localStorage.setItem("isLogged", false);
       this.$router.push({ name: "login" });
     },
     async getQtdPost(id) {
@@ -162,7 +163,7 @@ export default {
           this.logout(); 
         }
       }
-    }
+    } 
   },
   
 };

@@ -27,7 +27,10 @@
                                 <i class="fa-solid fa-user"></i> {{ user ? user.name : '' }}
                             </a>
                             <div class="dropdown-menu">
-                                <router-link class="dropdown-item" :to="{ name: 'index' }"><i class="fa-solid fa-gear"></i> Meus Dados </router-link>
+                                <router-link class="dropdown-item" :to="{ name: 'meus-dados' }">
+                                    <i class="fa-solid fa-gear"></i> Meus Dados 
+                                </router-link>
+                                
                                 <a class="dropdown-item" href="javascript:void(0)" @click.prevent="logout"><i class="fa fa-sign-out-alt"></i> Sair </a>
                             </div>
                         </li>
@@ -45,7 +48,7 @@ import { mapGetters } from 'vuex';
 export default {
     name: 'NavbarComponent',
     computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user', 'isLogged'])
     },
     methods: {
         async logout() {
@@ -60,6 +63,7 @@ export default {
                 localStorage.removeItem("token");
 
                 this.$store.dispatch("user", {});
+                localStorage.setItem("isLogged", false);
     
                 this.$router.push({ name: 'login' });
             } catch (error) {
@@ -67,9 +71,10 @@ export default {
             }
         },
         forcarLogout() {
-            this.$swal("Algo de errado aconteceu. Tente logar novamente. Se o erro persistir favor entrar em contato com suporte.");
+            this.$swal("Algo aconteceu. Você foi deslogado. Caso queira continuar, favor efetuar login.");
             localStorage.removeItem("token");
             this.$store.dispatch("user", {});
+            localStorage.setItem("isLogged", false);
             this.$router.push({ name: "login" });
         }
     }
