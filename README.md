@@ -37,7 +37,7 @@ git clone https://github.com/marwamprog-js/desafioTecnico_Codificar_Sistemas_Tec
 docker-compose up -d
 
 # Através do docker ps, pegar o id do container que foi criado na porta 8000 e executar o comando:
-docker exec <id/nomecontainer> bash -c "composer update ; php artisan migrate ; php artisan seeder"
+docker exec <id/nomecontainer> bash -c "composer update ; php artisan migrate ; php artisan db:seed"
 
 # Testando o projeto
 Abra o link http://localhost:8080
