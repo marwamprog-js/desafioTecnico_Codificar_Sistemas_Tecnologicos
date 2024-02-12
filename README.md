@@ -53,6 +53,13 @@ npm install
 
 # Testando o projeto: Ainda na pasta front-end, digitar o seguinte comento:
 yarn serve ou npm run serve
+
+# Testando o projeto
+Abra o link http://localhost:8080
+
+# Usuário para teste
+usuario: joao@teste.com.br
+senha: 12345678
 ```
 
 # Autor
