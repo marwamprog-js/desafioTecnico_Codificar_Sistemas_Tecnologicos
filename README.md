@@ -8,7 +8,7 @@ A aplicação consiste em compartilhar pequenas mensagens, atualizações pessoa
 ## Layout Web
 ![Tela Inicial](https://github.com/marwamprog-js/desafioTecnico_Codificar_Sistemas_Tecnologicos/blob/main/front-end/src/assets/appWeb.png)
 
-# Tecnologia utilizadas
+# Tecnologias utilizadas
 
 ## * Back end
 - PHP
