@@ -29,9 +29,17 @@ A aplicação consiste em compartilhar pequenas mensagens, atualizações pessoa
 Pré requisitos:
 - docker
 
+##back end
 ```bash
-#clonar repositorio
+# clonar repositorio
+git clone https://github.com/marwamprog-js/desafioTecnico_Codificar_Sistemas_Tecnologicos.git
 
+# Através do docker ps, pegar o id do container e executar o comando:
+docker exec <id/nomecontainer> bash -c "composer update ; php artisan migrate ; php artisan seeder"
+
+# Testando o projeto
+Abra o link http://localhost:8080
+tem que aparecer a página do Laravel
 ```
 
 
