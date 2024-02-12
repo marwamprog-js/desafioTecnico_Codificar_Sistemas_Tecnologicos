@@ -46,6 +46,8 @@ tem que aparecer a página do Laravel
 
 ## Front end
 ```bash
+# Dica: Instalar o node com o NVM
+
 # Abrir o terminal na pasta front-end e executar o comando:
 npm install
 
