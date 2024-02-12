@@ -10,18 +10,29 @@ A aplicação consiste em compartilhar pequenas mensagens, atualizações pessoa
 
 # Tecnologia utilizadas
 
-## Back end
+## *Back end
 - PHP
 - Laravel 8
 - JWT
 
-## Front end
+## *Front end
 - Javascript
 - SCSS (SASS)
 - Bootstrap
-### Vue js 3 (CLI)
+- Vue js 3 (CLI)
 - Axios
 - Vuex
 - Vue-Router
 - Vue-sweetalert2
 
+# Como executar o projeto
+Pré requisitos:
+- docker
+
+```bash
+#clonar repositorio
+
+```
+
+
+  
