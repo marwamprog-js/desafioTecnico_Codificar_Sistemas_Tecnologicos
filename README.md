@@ -28,19 +28,32 @@ A aplicação consiste em compartilhar pequenas mensagens, atualizações pessoa
 # Como executar o projeto
 Pré requisitos:
 - docker
-
-##back end
-```bash
-# clonar repositorio
+- clonar repositorio
 git clone https://github.com/marwamprog-js/desafioTecnico_Codificar_Sistemas_Tecnologicos.git
 
-# Através do docker ps, pegar o id do container e executar o comando:
+## Back end
+```bash
+# Através do docker ps, pegar o id do container que foi criado na porta 8000 e executar o comando:
 docker exec <id/nomecontainer> bash -c "composer update ; php artisan migrate ; php artisan seeder"
 
 # Testando o projeto
 Abra o link http://localhost:8080
 tem que aparecer a página do Laravel
 ```
+
+## Front end
+```bash
+# Abrir o terminal na pasta front-end e executar o comando:
+npm install
+
+# Testando o projeto: Ainda na pasta front-end, digitar o seguinte comento:
+yarn serve ou npm run serve
+```
+
+# Autor
+Marwam Malta Araujo
+
+Linkedin: https://www.linkedin.com/in/marwam-malta-80916030/
 
 
   
